@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package grpcgo;
+
+option go_package = "github.com/Ak-Srivastav/grpcgo";
+// The CRUD service definition.
+service CrudService {
+    // Create a new item
+    rpc CreateItem (CreateItemRequest) returns (CreateItemResponse) {}
+
+    // Read an item by ID
+    rpc ReadItem (ReadItemRequest) returns (ReadItemResponse) {}
+
+    // Update an existing item
+    rpc UpdateItem (UpdateItemRequest) returns (UpdateItemResponse) {}
+
+    // Delete an item by ID
+    rpc DeleteItem (DeleteItemRequest) returns (DeleteItemResponse) {}
+}
+
+// The request message for creating an item.
+message CreateItemRequest {
+    string name = 1;
+    string description = 2;
+}
+
+// The response message for creating an item.
+message CreateItemResponse {
+    string id = 1;
+}
+
+// The request message for reading an item.
+message ReadItemRequest {
+    string id = 1;
+}
+
+// The response message for reading an item.
+message ReadItemResponse {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+}
+
+// The request message for updating an item.
+message UpdateItemRequest {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+}
+
+// The response message for updating an item.
+message UpdateItemResponse {
+    bool success = 1;
+}
+
+// The request message for deleting an item.
+message DeleteItemRequest {
+    string id = 1;
+}
+
+// The response message for deleting an item.
+message DeleteItemResponse {
+    bool success = 1;
+}
