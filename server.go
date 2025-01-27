@@ -1,17 +1,13 @@
-package main
+package grpcgo
 
 import (
 	"context"
 	"database/sql"
 	"log"
-
-	_ "github.com/lib/pq"
-
-	"github.com/Ak-Srivastav/grpcgo"
 )
 
 type Service struct {
-	grpcgo.UnimplementedCrudServiceServer
+	UnimplementedCrudServiceServer
 	db *sql.DB
 }
 
@@ -21,17 +17,17 @@ func NewService(db *sql.DB) *Service {
 
 // Returning temporary data as of now
 
-func (s *Service) CreateItem(ctx context.Context, req *grpcgo.CreateItemRequest) (*grpcgo.CreateItemResponse, error) {
+func (s *Service) CreateItem(ctx context.Context, req *CreateItemRequest) (*CreateItemResponse, error) {
 	// Implement your logic to create an item in CockroachDB
 	log.Printf("Received CreateItem request: %v", req)
 	_, err := s.db.ExecContext(ctx, "INSERT INTO items (name, description) VALUES ($1, $2)", req.Name, req.Description)
 	if err != nil {
 		return nil, err
 	}
-	return &grpcgo.CreateItemResponse{Id: "1"}, nil
+	return &CreateItemResponse{Id: "1"}, nil
 }
 
-func (s *Service) ReadItem(ctx context.Context, req *grpcgo.ReadItemRequest) (*grpcgo.ReadItemResponse, error) {
+func (s *Service) ReadItem(ctx context.Context, req *ReadItemRequest) (*ReadItemResponse, error) {
 	// Implement your logic to read an item from CockroachDB
 	log.Printf("Received ReadItem request: %v", req)
 	var name, description string
@@ -39,25 +35,25 @@ func (s *Service) ReadItem(ctx context.Context, req *grpcgo.ReadItemRequest) (*g
 	if err != nil {
 		return nil, err
 	}
-	return &grpcgo.ReadItemResponse{Id: req.Id, Name: name, Description: description}, nil
+	return &ReadItemResponse{Id: req.Id, Name: name, Description: description}, nil
 }
 
-func (s *Service) UpdateItem(ctx context.Context, req *grpcgo.UpdateItemRequest) (*grpcgo.UpdateItemResponse, error) {
+func (s *Service) UpdateItem(ctx context.Context, req *UpdateItemRequest) (*UpdateItemResponse, error) {
 	// Implement your logic to update an item in CockroachDB
 	log.Printf("Received UpdateItem request: %v", req)
 	_, err := s.db.ExecContext(ctx, "UPDATE items SET name = $1, description = $2 WHERE id = $3", req.Name, req.Description, req.Id)
 	if err != nil {
 		return nil, err
 	}
-	return &grpcgo.UpdateItemResponse{Success: true}, nil
+	return &UpdateItemResponse{Success: true}, nil
 }
 
-func (s *Service) DeleteItem(ctx context.Context, req *grpcgo.DeleteItemRequest) (*grpcgo.DeleteItemResponse, error) {
+func (s *Service) DeleteItem(ctx context.Context, req *DeleteItemRequest) (*DeleteItemResponse, error) {
 	// Implement your logic to delete an item from CockroachDB
 	log.Printf("Received DeleteItem request: %v", req)
 	_, err := s.db.ExecContext(ctx, "DELETE FROM items WHERE id = $1", req.Id)
 	if err != nil {
 		return nil, err
 	}
-	return &grpcgo.DeleteItemResponse{Success: true}, nil
+	return &DeleteItemResponse{Success: true}, nil
 }

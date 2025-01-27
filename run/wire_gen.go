@@ -8,16 +8,21 @@ package main
 
 import (
 	"database/sql"
+	"github.com/Ak-Srivastav/grpcgo"
+)
+
+import (
+	_ "github.com/lib/pq"
 )
 
 // Injectors from wire.go:
 
-func InitializeServer() (*Service, error) {
+func InitializeServer() (*grpcgo.Service, error) {
 	db, err := provideDB()
 	if err != nil {
 		return nil, err
 	}
-	service := NewService(db)
+	service := grpcgo.NewService(db)
 	return service, nil
 }
 

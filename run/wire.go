@@ -7,11 +7,15 @@ import (
 	"database/sql"
 
 	"github.com/google/wire"
+
+	_ "github.com/lib/pq"
+
+	"github.com/Ak-Srivastav/grpcgo"
 )
 
-func InitializeServer() (*Service, error) {
-	wire.Build(NewService, provideDB)
-	return nil, nil
+func InitializeServer() (*grpcgo.Service, error) {
+	wire.Build(grpcgo.NewService, provideDB)
+	return &grpcgo.Service{}, nil
 }
 
 func provideDB() (*sql.DB, error) {
